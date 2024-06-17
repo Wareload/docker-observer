@@ -1,13 +1,8 @@
-
-import {api} from "wl/trpc/server";
-import type {ContainerInfo} from "dockerode";
 import DockerComposeCard from "wl/app/_components/DockerComposeCard";
+import {api} from "wl/trpc/server";
 
 export default async function Home() {
-    const containers = (await listContainer()).sort((a, b) => {
-        return a.key.localeCompare(b.key)
-    })
-
+    const containers = await api.docker.listContainer()
     return (
         <div>
             {containers.map((element) => {
@@ -15,20 +10,4 @@ export default async function Home() {
             })}
         </div>
     )
-}
-
-async function listContainer() {
-    const container = await (await api.docker.dockerode()).listContainers({all:true});
-
-    const array: { key: string, value: ContainerInfo[] }[] = []
-    container.forEach((item) => {
-        const key = item.Labels["com.docker.compose.project"] ?? "";
-        const hit = array.find(element => element.key == key);
-        if (hit) {
-            hit.value.push(item);
-        } else {
-            array.push({key: key, value: [item]});
-        }
-    })
-    return array;
 }

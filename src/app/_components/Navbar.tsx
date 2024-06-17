@@ -1,7 +1,6 @@
 'use client'
 import {usePathname} from "next/navigation"
 
-
 export default function Navbar() {
     const pathname = usePathname()
     return (<div className="flex flex-row flex-wrap gap-7">

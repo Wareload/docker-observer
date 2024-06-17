@@ -1,56 +1,15 @@
 'use client'
-import type Dockerode from "dockerode";
-import {CssLink, CssSmallButton} from "wl/app/_components/Css";
+import {CssLink} from "wl/app/_utils/Css";
 import {useState} from "react";
-import {api} from "wl/trpc/react";
-import {useRouter} from "next/navigation";
+import ContainerActions from "wl/app/_components/ContainerActions";
+import {type ContainerInfo} from "dockerode";
+import {getContainerStats} from "wl/app/_utils/Container";
 
 export default function DockerComposeCard({containers}: {
-    containers: { key: string; value: Dockerode.ContainerInfo[] }
+    containers: { key: string; value: ContainerInfo[] }
 }) {
-    const router = useRouter();
     const containerStats = getContainerStats(containers)
     const [expanded, setExpanded] = useState(false)
-    const restartContainer = api.docker.restartContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e)=>{
-            console.error(e)
-        }
-    })
-    const pauseContainer = api.docker.pauseContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e)=>{
-            console.error(e)
-        }
-    })
-    const unpauseContainer = api.docker.unpauseContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e)=>{
-            console.error(e)
-        }
-    })
-    const stopContainer = api.docker.stopContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e)=>{
-            console.error(e)
-        }
-    })
-    const removeContainer = api.docker.removeContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e)=>{
-            console.error(e)
-        }
-    })
     return <div className="m-4 border-2 border-white rounded-2xl p-4 bg-blend-darken bg-gray-800 bg-opacity-60">
         <div className="flex flex-row justify-between">
             <div className="flex flex-row justify-center items-center m-1">
@@ -72,7 +31,6 @@ export default function DockerComposeCard({containers}: {
                 </button>
                 <span className="font-extrabold text-2xl"><a href={"container/project/" + containers.key}
                                                              className={CssLink}>{containers.key ? containers.key : "without project"}</a></span>
-
             </div>
             <span
                 className="ml-8 font-thin">{containerStats.running} running | {containerStats.paused} paused | {containerStats.exited} stopped</span>
@@ -89,57 +47,10 @@ export default function DockerComposeCard({containers}: {
                                                                               href={"image/" + item.ImageID}> {item.Image}</a></span>
                     <span className="font-extralight"
                           key={item.Id + "-status"}><strong>Status: </strong>{item.State + " - " + item.Status.toLowerCase()}</span>
-                    <div className="flex flex-row gap-2 my-1">
-                        <button type="button"
-                                className={CssSmallButton + (item.State !== "paused" ? " hidden" : "")}>Start
-                        </button>
-                        <button type="button" onClick={() => {
-                            restartContainer.mutate({id: item.Id})
-                        }}
-                                className={CssSmallButton}>Restart
-                        </button>
-                        <button type="button" onClick={() => {
-                            pauseContainer.mutate({id: item.Id})
-                        }}
-                                className={CssSmallButton + (item.State !== "running" ? " hidden" : "")}>Pause
-                        </button>
-                        <button type="button" onClick={() => {
-                            unpauseContainer.mutate({id: item.Id})
-                        }}
-                                className={CssSmallButton + (item.State !== "paused" ? " hidden" : "")}>Unpause
-                        </button>
-                        <button type="button" onClick={() => {
-                            stopContainer.mutate({id: item.Id})
-                        }}
-                                className={CssSmallButton + (item.State !== "running" ? " hidden" : "")}>Stop
-                        </button>
-                        <button type="button" onClick={() => {
-                            removeContainer.mutate({id: item.Id})
-                        }}
-                                className={CssSmallButton + (item.State !== "exited" ? " hidden" : "")}>Remove
-                        </button>
-                    </div>
+                    <ContainerActions item={item}></ContainerActions>
                 </div>
             })}
         </div>
     </div>
 }
 
-
-function getContainerStats(containers: { key: string; value: Dockerode.ContainerInfo[] }) {
-    const containerStats = {running: 0, paused: 0, exited: 0}
-    containers.value.forEach(element => {
-        switch (element.State) {
-            case "running":
-                containerStats.running++;
-                break
-            case "paused":
-                containerStats.paused++;
-                break
-            case "exited":
-                containerStats.exited++;
-                break
-        }
-    })
-    return containerStats
-}
