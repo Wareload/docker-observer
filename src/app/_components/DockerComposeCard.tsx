@@ -2,12 +2,55 @@
 import type Dockerode from "dockerode";
 import {CssLink, CssSmallButton} from "wl/app/_components/Css";
 import {useState} from "react";
+import {api} from "wl/trpc/react";
+import {useRouter} from "next/navigation";
 
 export default function DockerComposeCard({containers}: {
     containers: { key: string; value: Dockerode.ContainerInfo[] }
 }) {
+    const router = useRouter();
     const containerStats = getContainerStats(containers)
     const [expanded, setExpanded] = useState(false)
+    const restartContainer = api.docker.restartContainer.useMutation({
+        onSuccess: () => {
+            router.refresh()
+        },
+        onError: (e)=>{
+            console.error(e)
+        }
+    })
+    const pauseContainer = api.docker.pauseContainer.useMutation({
+        onSuccess: () => {
+            router.refresh()
+        },
+        onError: (e)=>{
+            console.error(e)
+        }
+    })
+    const unpauseContainer = api.docker.unpauseContainer.useMutation({
+        onSuccess: () => {
+            router.refresh()
+        },
+        onError: (e)=>{
+            console.error(e)
+        }
+    })
+    const stopContainer = api.docker.stopContainer.useMutation({
+        onSuccess: () => {
+            router.refresh()
+        },
+        onError: (e)=>{
+            console.error(e)
+        }
+    })
+    const removeContainer = api.docker.removeContainer.useMutation({
+        onSuccess: () => {
+            router.refresh()
+        },
+        onError: (e)=>{
+            console.error(e)
+        }
+    })
     return <div className="m-4 border-2 border-white rounded-2xl p-4 bg-blend-darken bg-gray-800 bg-opacity-60">
         <div className="flex flex-row justify-between">
             <div className="flex flex-row justify-center items-center m-1">
@@ -27,8 +70,8 @@ export default function DockerComposeCard({containers}: {
           </svg>}
       </span>
                 </button>
-                <span className="font-extrabold text-2xl">Project: <a href={"container/project/" + containers.key}
-                                                                      className={CssLink}>{containers.key ? containers.key : "without"}</a></span>
+                <span className="font-extrabold text-2xl"><a href={"container/project/" + containers.key}
+                                                             className={CssLink}>{containers.key ? containers.key : "without project"}</a></span>
 
             </div>
             <span
@@ -37,25 +80,42 @@ export default function DockerComposeCard({containers}: {
 
         <div className={expanded ? "flex flex-col" : "hidden"}>
             {containers.value.map((item) => {
-                return <div key={item.Id} className="flex flex-col m-2">
-                    <span key={item.Id}><strong>Name: </strong><a className={CssLink}
-                                                 href={"container/" + item.Id}> {item.Names.map(item => item.substring(1)).join(", ")}</a></span>
-                    <span key={item.Id}><strong>ID: </strong><a className={CssLink} href={"container/" + item.Id}> {item.Id}</a></span>
-                    <span key={item.Id}><strong>Image: </strong><a className={CssLink}
-                                                  href={"image/" + item.ImageID}> {item.Image}</a></span>
+                return <div key={item.Id + "-card"} className="flex flex-col m-2">
+                    <span key={item.Id + "-name"}><strong>Name: </strong><a className={CssLink}
+                                                                            href={"container/" + item.Id}> {item.Names.map(item => item.substring(1)).join(", ")}</a></span>
+                    <span key={item.Id + "-id"}><strong>ID: </strong><a className={CssLink}
+                                                                        href={"container/" + item.Id}> {item.Id}</a></span>
+                    <span key={item.Id + "-image"}><strong>Image: </strong><a className={CssLink}
+                                                                              href={"image/" + item.ImageID}> {item.Image}</a></span>
                     <span className="font-extralight"
-                          key={item.Id}><strong>Status: </strong>{item.State + " - " + item.Status.toLowerCase()}</span>
+                          key={item.Id + "-status"}><strong>Status: </strong>{item.State + " - " + item.Status.toLowerCase()}</span>
                     <div className="flex flex-row gap-2 my-1">
                         <button type="button"
                                 className={CssSmallButton + (item.State !== "paused" ? " hidden" : "")}>Start
                         </button>
-                        <button type="button"
+                        <button type="button" onClick={() => {
+                            restartContainer.mutate({id: item.Id})
+                        }}
+                                className={CssSmallButton}>Restart
+                        </button>
+                        <button type="button" onClick={() => {
+                            pauseContainer.mutate({id: item.Id})
+                        }}
                                 className={CssSmallButton + (item.State !== "running" ? " hidden" : "")}>Pause
                         </button>
-                        <button type="button"
-                                className={CssSmallButton + (item.State !== "running" && item.State !== "paused" ? " hidden" : "")}>Stop
+                        <button type="button" onClick={() => {
+                            unpauseContainer.mutate({id: item.Id})
+                        }}
+                                className={CssSmallButton + (item.State !== "paused" ? " hidden" : "")}>Unpause
                         </button>
-                        <button type="button"
+                        <button type="button" onClick={() => {
+                            stopContainer.mutate({id: item.Id})
+                        }}
+                                className={CssSmallButton + (item.State !== "running" ? " hidden" : "")}>Stop
+                        </button>
+                        <button type="button" onClick={() => {
+                            removeContainer.mutate({id: item.Id})
+                        }}
                                 className={CssSmallButton + (item.State !== "exited" ? " hidden" : "")}>Remove
                         </button>
                     </div>
