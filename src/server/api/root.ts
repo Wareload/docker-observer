@@ -1,5 +1,5 @@
-import { postRouter } from "wl/server/api/routers/post";
-import { createCallerFactory, createTRPCRouter } from "wl/server/api/trpc";
+import {createCallerFactory, createTRPCRouter} from "wl/server/api/trpc";
+import {dockerRouter} from "wl/server/api/routers/docker";
 
 /**
  * This is the primary router for your server.
@@ -7,7 +7,7 @@ import { createCallerFactory, createTRPCRouter } from "wl/server/api/trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  post: postRouter,
+    docker: dockerRouter,
 });
 
 // export type definition of API
