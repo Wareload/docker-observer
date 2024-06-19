@@ -24,20 +24,20 @@ export default function ContainerActions(input: { item: ContainerInfo }) {
     const actionConfigs: {
         action: string,
         mutation: UseMutationResult<void, object, { id: string }>,
-        requiredVisibilityState: string | undefined
+        requiredVisibilityState: string[]
     } [] = [
-        {action: 'start', mutation: useMutationOf(api.docker.startContainer), requiredVisibilityState: 'exited'},
-        {action: 'restart', mutation: useMutationOf(api.docker.restartContainer), requiredVisibilityState: undefined},
-        {action: 'pause', mutation: useMutationOf(api.docker.pauseContainer), requiredVisibilityState: 'running'},
-        {action: 'unpause', mutation: useMutationOf(api.docker.unpauseContainer), requiredVisibilityState: 'paused'},
-        {action: 'stop', mutation: useMutationOf(api.docker.stopContainer), requiredVisibilityState: 'running'},
-        {action: 'remove', mutation: useMutationOf(api.docker.removeContainer), requiredVisibilityState: 'exited'},
+        {action: 'start', mutation: useMutationOf(api.docker.startContainer), requiredVisibilityState: ['exited']},
+        {action: 'restart', mutation: useMutationOf(api.docker.restartContainer), requiredVisibilityState: []},
+        {action: 'pause', mutation: useMutationOf(api.docker.pauseContainer), requiredVisibilityState: ['running']},
+        {action: 'unpause', mutation: useMutationOf(api.docker.unpauseContainer), requiredVisibilityState: ['paused']},
+        {action: 'stop', mutation: useMutationOf(api.docker.stopContainer), requiredVisibilityState: ['running']},
+        {action: 'remove', mutation: useMutationOf(api.docker.removeContainer), requiredVisibilityState: ['exited']},
     ];
     return <div className="flex flex-row gap-2 my-1">
         {actionConfigs.map((item) => <button key={"Button: " + item.action + input.item.Id} type="button"
                                              onClick={() => {
                                                  item.mutation.mutate({id: input.item.Id})
                                              }}
-                                             className={CssSmallButton + (item.requiredVisibilityState && (input.item.State !== item.requiredVisibilityState ? " hidden" : ""))}>{item.action}</button>)}
+                                             className={CssSmallButton + (item.requiredVisibilityState.some(e => e !== input.item.State) ? " hidden" : "")}>{item.action}</button>)}
     </div>
 }
