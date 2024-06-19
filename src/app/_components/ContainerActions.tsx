@@ -46,9 +46,19 @@ export default function ContainerActions(input: { item: ContainerInfo }) {
             console.error(e)
         }
     })
+    const startContainer = api.docker.startContainer.useMutation({
+        onSuccess: () => {
+            router.refresh()
+        },
+        onError: (e) => {
+            console.error(e)
+        }
+    })
     return <div className="flex flex-row gap-2 my-1">
-        <button type="button"
-                className={CssSmallButton + (input.item.State !== "paused" ? " hidden" : "")}>Start
+        <button type="button" onClick={() => {
+            startContainer.mutate({id: input.item.Id})
+        }}
+                className={CssSmallButton + (input.item.State !== "exited" ? " hidden" : "")}>Start
         </button>
         <button type="button" onClick={() => {
             restartContainer.mutate({id: input.item.Id})

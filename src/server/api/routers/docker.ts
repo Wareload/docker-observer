@@ -29,6 +29,7 @@ export const dockerRouter = createTRPCRouter({
 });
 
 async function listContainer() {
+    await dockerConnector.listContainers({})
     const container = await dockerConnector.listContainers({all: true});
     const array: { key: string, value: ContainerInfo[] }[] = []
     container.forEach((item) => {

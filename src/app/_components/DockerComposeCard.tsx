@@ -10,7 +10,8 @@ export default function DockerComposeCard({containers}: {
 }) {
     const containerStats = getContainerStats(containers)
     const [expanded, setExpanded] = useState(false)
-    return <div className="m-4 border-2 border-white rounded-2xl p-4 bg-blend-darken bg-gray-800 bg-opacity-60">
+    return <div
+        className="m-4 border-2 border-white rounded-2xl p-4 bg-blend-darken bg-gray-800 bg-opacity-60 shadow-2xl shadow-black">
         <div className="flex flex-row justify-between">
             <div className="flex flex-row justify-center items-center m-1">
                 <button onClick={() => setExpanded(!expanded)}
@@ -29,7 +30,7 @@ export default function DockerComposeCard({containers}: {
           </svg>}
       </span>
                 </button>
-                <span className="font-extrabold text-2xl"><a href={"container/project/" + containers.key}
+                <span className="font-extrabold text-2xl"><a href={"/project/" + containers.key}
                                                              className={CssLink}>{containers.key ? containers.key : "without project"}</a></span>
             </div>
             <span
@@ -40,11 +41,11 @@ export default function DockerComposeCard({containers}: {
             {containers.value.map((item) => {
                 return <div key={item.Id + "-card"} className="flex flex-col m-2">
                     <span key={item.Id + "-name"}><strong>Name: </strong><a className={CssLink}
-                                                                            href={"container/" + item.Id}> {item.Names.map(item => item.substring(1)).join(", ")}</a></span>
+                                                                            href={"/container/" + item.Id}> {item.Names.map(item => item.substring(1)).join(", ")}</a></span>
                     <span key={item.Id + "-id"}><strong>ID: </strong><a className={CssLink}
-                                                                        href={"container/" + item.Id}> {item.Id}</a></span>
+                                                                        href={"/container/" + item.Id}> {item.Id}</a></span>
                     <span key={item.Id + "-image"}><strong>Image: </strong><a className={CssLink}
-                                                                              href={"image/" + item.ImageID}> {item.Image}</a></span>
+                                                                              href={"/image/" + item.ImageID}> {item.Image}</a></span>
                     <span className="font-extralight"
                           key={item.Id + "-status"}><strong>Status: </strong>{item.State + " - " + item.Status.toLowerCase()}</span>
                     <ContainerActions item={item}></ContainerActions>
