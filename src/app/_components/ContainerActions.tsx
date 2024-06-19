@@ -6,84 +6,23 @@ import {type ContainerInfo} from "dockerode";
 
 export default function ContainerActions(input: { item: ContainerInfo }) {
     const router = useRouter();
-    const restartContainer = api.docker.restartContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e) => {
-            console.error(e)
-        }
+    const useMutationOf = (mutationFn: { useMutation: any}) => mutationFn.useMutation({
+        onSuccess: () => router.refresh(),
+        onError: (e: Error) => console.error(e),
     })
-    const pauseContainer = api.docker.pauseContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e) => {
-            console.error(e)
-        }
-    })
-    const unpauseContainer = api.docker.unpauseContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e) => {
-            console.error(e)
-        }
-    })
-    const stopContainer = api.docker.stopContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e) => {
-            console.error(e)
-        }
-    })
-    const removeContainer = api.docker.removeContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e) => {
-            console.error(e)
-        }
-    })
-    const startContainer = api.docker.startContainer.useMutation({
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e) => {
-            console.error(e)
-        }
-    })
+    const actionConfigs = [
+        {action: 'start', mutation: useMutationOf(api.docker.startContainer), allowedVisibilityState: 'exited'},
+        {action: 'restart', mutation: useMutationOf(api.docker.restartContainer), allowedVisibilityState: undefined},
+        {action: 'pause', mutation: useMutationOf(api.docker.pauseContainer), allowedVisibilityState: 'running'},
+        {action: 'unpause', mutation: useMutationOf(api.docker.unpauseContainer), allowedVisibilityState: 'paused'},
+        {action: 'stop', mutation: useMutationOf(api.docker.stopContainer), allowedVisibilityState: 'running'},
+        {action: 'remove', mutation: useMutationOf(api.docker.removeContainer), allowedVisibilityState: 'exited'},
+    ];
     return <div className="flex flex-row gap-2 my-1">
-        <button type="button" onClick={() => {
-            startContainer.mutate({id: input.item.Id})
-        }}
-                className={CssSmallButton + (input.item.State !== "exited" ? " hidden" : "")}>Start
-        </button>
-        <button type="button" onClick={() => {
-            restartContainer.mutate({id: input.item.Id})
-        }}
-                className={CssSmallButton}>Restart
-        </button>
-        <button type="button" onClick={() => {
-            pauseContainer.mutate({id: input.item.Id})
-        }}
-                className={CssSmallButton + (input.item.State !== "running" ? " hidden" : "")}>Pause
-        </button>
-        <button type="button" onClick={() => {
-            unpauseContainer.mutate({id: input.item.Id})
-        }}
-                className={CssSmallButton + (input.item.State !== "paused" ? " hidden" : "")}>Unpause
-        </button>
-        <button type="button" onClick={() => {
-            stopContainer.mutate({id: input.item.Id})
-        }}
-                className={CssSmallButton + (input.item.State !== "running" ? " hidden" : "")}>Stop
-        </button>
-        <button type="button" onClick={() => {
-            removeContainer.mutate({id: input.item.Id})
-        }}
-                className={CssSmallButton + (input.item.State !== "exited" ? " hidden" : "")}>Remove
-        </button>
+        {actionConfigs.map((item) => <button key={"Button: " + item.action + input.item.Id} type="button"
+                                             onClick={() => {
+                                                 item.mutation.mutate({id: input.item.Id})
+                                             }}
+                                             className={CssSmallButton + (item.allowedVisibilityState && (input.item.State !== item.allowedVisibilityState ? " hidden" : ""))}>{item.action}</button>)}
     </div>
 }
