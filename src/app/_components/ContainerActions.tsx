@@ -18,18 +18,10 @@ export default function ContainerActions(input: { item: ContainerInfo }) {
             id: string
         }>;
     }) => mutationFn.useMutation({
-        onMutate: () => {
-            setLoading(true)
-        },
-        onSuccess: () => {
-            router.refresh()
-        },
-        onError: (e: TRPCClientErrorLike<InferrableClientTypes>) => {
-            alert("An error occurred: " + e.message)
-        },
-        onSettled: () => {
-            setLoading(false)
-        }
+        onMutate: () => setLoading(true),
+        onSuccess: () => router.refresh(),
+        onError: (e: TRPCClientErrorLike<InferrableClientTypes>) => alert("An error occurred: " + e.message),
+        onSettled: () => setLoading(false)
     })
     const actionConfigs: {
         action: string,

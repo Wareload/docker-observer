@@ -46,7 +46,7 @@ export default function DockerComposeCard({containers}: {
                                                                         href={"/container/" + item.Id}> {item.Id}</a></span>
                     <span className="truncate" key={item.Id + "-image"}><strong>Image: </strong><a className={CssLink}
                                                                               href={"/image/" + item.ImageID}> {item.Image}</a></span>
-                    <span  className="font-extralight truncate"
+                    <span className="font-extralight truncate"
                           key={item.Id + "-status"}><strong>Status: </strong>{item.State + " - " + item.Status.toLowerCase()}</span>
                     <ContainerActions item={item}></ContainerActions>
                 </div>
