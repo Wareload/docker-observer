@@ -40,13 +40,13 @@ export default function DockerComposeCard({containers}: {
         <div className={expanded ? "flex flex-col" : "hidden"}>
             {containers.value.map((item) => {
                 return <div key={item.Id + "-card"} className="flex flex-col m-2">
-                    <span key={item.Id + "-name"}><strong>Name: </strong><a className={CssLink}
+                    <span className="truncate" key={item.Id + "-name"}><strong>Name: </strong><a className={CssLink}
                                                                             href={"/container/" + item.Id}> {item.Names.map(item => item.substring(1)).join(", ")}</a></span>
-                    <span key={item.Id + "-id"}><strong>ID: </strong><a className={CssLink}
+                    <span className="truncate" key={item.Id + "-id"}><strong>ID: </strong><a className={CssLink}
                                                                         href={"/container/" + item.Id}> {item.Id}</a></span>
-                    <span key={item.Id + "-image"}><strong>Image: </strong><a className={CssLink}
+                    <span className="truncate" key={item.Id + "-image"}><strong>Image: </strong><a className={CssLink}
                                                                               href={"/image/" + item.ImageID}> {item.Image}</a></span>
-                    <span className="font-extralight"
+                    <span  className="font-extralight truncate"
                           key={item.Id + "-status"}><strong>Status: </strong>{item.State + " - " + item.Status.toLowerCase()}</span>
                     <ContainerActions item={item}></ContainerActions>
                 </div>
