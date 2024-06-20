@@ -1,29 +1,39 @@
 'use client'
 import {api} from "wl/trpc/react";
 import {useRouter} from "next/navigation";
-import {CssSmallButton} from "wl/app/_utils/Css";
+import {CssSmallButton, CssSmallButtonDisabled} from "wl/app/_utils/Css";
 import {type ContainerInfo} from "dockerode";
 import {type UseMutationOptions, type UseMutationResult} from "@tanstack/react-query";
+import {useState} from "react";
+import {type TRPCClientErrorLike} from "@trpc/client";
+import {type InferrableClientTypes} from "@trpc/server/unstable-core-do-not-import";
 
 export default function ContainerActions(input: { item: ContainerInfo }) {
     const router = useRouter();
+    const [loading, setLoading] = useState<boolean>(false)
     const useMutationOf = (mutationFn: {
-        useMutation: (opts?: UseMutationOptions<void, object, {
+        useMutation: (opts?: UseMutationOptions<void, TRPCClientErrorLike<InferrableClientTypes>, {
             id: string
-        }>) => UseMutationResult<void, object, {
+        }>) => UseMutationResult<void, TRPCClientErrorLike<InferrableClientTypes>, {
             id: string
         }>;
     }) => mutationFn.useMutation({
+        onMutate: () => {
+            setLoading(true)
+        },
         onSuccess: () => {
             router.refresh()
         },
-        onError: (e: object) => {
-            console.error(e)
+        onError: (e: TRPCClientErrorLike<InferrableClientTypes>) => {
+            alert("An error occurred: " + e.message)
         },
+        onSettled: () => {
+            setLoading(false)
+        }
     })
     const actionConfigs: {
         action: string,
-        mutation: UseMutationResult<void, object, { id: string }>,
+        mutation: UseMutationResult<void, TRPCClientErrorLike<InferrableClientTypes>, { id: string }>,
         requiredVisibilityState: string[]
     } [] = [
         {action: 'start', mutation: useMutationOf(api.docker.startContainer), requiredVisibilityState: ['exited']},
@@ -37,7 +47,7 @@ export default function ContainerActions(input: { item: ContainerInfo }) {
         {actionConfigs.map((item) => <button key={"Button: " + item.action + input.item.Id} type="button"
                                              onClick={() => {
                                                  item.mutation.mutate({id: input.item.Id})
-                                             }}
-                                             className={CssSmallButton + (item.requiredVisibilityState.some(e => e !== input.item.State) ? " hidden" : "")}>{item.action}</button>)}
+                                             }} disabled={loading}
+                                             className={(loading ? CssSmallButtonDisabled : CssSmallButton) + (item.requiredVisibilityState.some(e => e !== input.item.State) ? " hidden" : "")}>{item.action}</button>)}
     </div>
 }
