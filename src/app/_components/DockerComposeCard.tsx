@@ -1,9 +1,10 @@
 'use client'
-import {CssLink} from "wl/app/_utils/Css";
+import {CssCard, CssLink} from "wl/app/_utils/Css";
 import {useState} from "react";
 import ContainerActions from "wl/app/_components/ContainerActions";
 import {type ContainerInfo} from "dockerode";
 import {getContainerStats} from "wl/app/_utils/Container";
+import ContainerView from "wl/app/_components/ContainerView";
 
 export default function DockerComposeCard({containers}: {
     containers: { key: string; value: ContainerInfo[] }
@@ -11,7 +12,7 @@ export default function DockerComposeCard({containers}: {
     const containerStats = getContainerStats(containers)
     const [expanded, setExpanded] = useState(false)
     return <div
-        className="m-4 border-2 border-white rounded-2xl p-4 bg-blend-darken bg-gray-800 bg-opacity-60 shadow-2xl shadow-black">
+        className={CssCard}>
         <div className="flex flex-row justify-between">
             <div className="flex flex-row justify-center items-center m-1">
                 <button onClick={() => setExpanded(!expanded)}
@@ -36,21 +37,11 @@ export default function DockerComposeCard({containers}: {
             <span
                 className="ml-8 font-thin">{containerStats.running} running | {containerStats.paused} paused | {containerStats.exited} stopped</span>
         </div>
-
         <div className={expanded ? "flex flex-col" : "hidden"}>
-            {containers.value.map((item) => {
-                return <div key={item.Id + "-card"} className="flex flex-col m-2">
-                    <span className="truncate" key={item.Id + "-name"}><strong>Name: </strong><a className={CssLink}
-                                                                            href={"/container/" + item.Id}> {item.Names.map(item => item.substring(1)).join(", ")}</a></span>
-                    <span className="truncate" key={item.Id + "-id"}><strong>ID: </strong><a className={CssLink}
-                                                                        href={"/container/" + item.Id}> {item.Id}</a></span>
-                    <span className="truncate" key={item.Id + "-image"}><strong>Image: </strong><a className={CssLink}
-                                                                              href={"/image/" + item.ImageID}> {item.Image}</a></span>
-                    <span className="font-extralight truncate"
-                          key={item.Id + "-status"}><strong>Status: </strong>{item.State + " - " + item.Status.toLowerCase()}</span>
-                    <ContainerActions item={item}></ContainerActions>
-                </div>
+            {containers.value.map(item => {
+                return <ContainerView key={item.Id+"compose-card"} container={item} expandedView={false}></ContainerView>
             })}
+
         </div>
     </div>
 }

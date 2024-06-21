@@ -1,7 +1,8 @@
 'use client'
 import {type ContainerInfo} from "dockerode";
-import {CssSmallButton, CssSmallButtonDisabled} from "wl/app/_utils/Css";
+import {CssCard, CssSmallButton, CssSmallButtonDisabled} from "wl/app/_utils/Css";
 import {useState} from "react";
+import ContainerView from "wl/app/_components/ContainerView";
 
 export function ProjectPage({project}: { project: { key: string, value: ContainerInfo[] } }) {
     let networks = new Set<string>([])
@@ -9,12 +10,12 @@ export function ProjectPage({project}: { project: { key: string, value: Containe
     project.value.forEach((element) => {
         networks = new Set([...networks, ...Object.keys(element.NetworkSettings.Networks)])
     })
-    return <div className="flex flex-col">
-        <h1 className="text-3xl"><strong>{project.key}</strong></h1>
-        <div className="flex flex-row flex-wrap gap-2 m-4">
+    return <div className={CssCard}>
+        <h1 className="text-3xl m-1"><strong>{project.key}</strong></h1>
+        <div className="flex flex-row flex-wrap gap-2 m-4 ml-1 mr-1">
             {Array.from(networks).map(network => {
                 return <button onClick={() => {
-                    setNetworkFilter(networkFilter === networkFilter ? undefined : network);
+                    setNetworkFilter(networkFilter == network ? undefined : network);
                 }}
                                className={(networkFilter && networkFilter !== network) ? CssSmallButtonDisabled : CssSmallButton}
                                key={"Network: " + network}>{network}</button>
@@ -23,7 +24,9 @@ export function ProjectPage({project}: { project: { key: string, value: Containe
         {project.value.map(item => {
             return <span className={((Object.keys(item.NetworkSettings.Networks).some(nw => {
                 return nw === networkFilter || networkFilter === undefined
-            }) ? "" : "opacity-30"))} key={"Span: " + item.Id}>{item.Image}</span>
+            }) ? "" : "opacity-30"))} key={"Span: " + item.Id}>
+                <ContainerView container={item} expandedView={true}></ContainerView>
+            </span>
         })}
     </div>
 }

@@ -28,7 +28,9 @@ export default function RootLayout({
                         Docker Observer
                     </h1>
                     <Navbar></Navbar>
+                    <div className="2xl:max-w-[800px] xl:w-3/5  md:w-3/4 w-full">
                     {children}
+                    </div>
                 </div>
             </main>
         </TRPCReactProvider>
