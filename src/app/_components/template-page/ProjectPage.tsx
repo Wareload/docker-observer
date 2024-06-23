@@ -11,7 +11,7 @@ export function ProjectPage({project}: { project: { key: string, value: Containe
         networks = new Set([...networks, ...Object.keys(element.NetworkSettings.Networks)])
     })
     return <div className={CssCard}>
-        <h1 className="text-3xl m-1"><strong>{project.key}</strong></h1>
+        <h1 className="text-3xl m-1"><strong>Project: {project.key}</strong></h1>
         <div className="flex flex-row flex-wrap gap-2 m-4 ml-1 mr-1">
             {Array.from(networks).map(network => {
                 return <button onClick={() => {

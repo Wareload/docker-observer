@@ -8,6 +8,6 @@ export default async function Project() {
     if (!hit) {
         redirect("/")
     }
-    return <ProjectPage project={{...hit, key: "Without project"}}/>;
+    return <ProjectPage project={{...hit, key: "<none>"}}/>;
 
 }

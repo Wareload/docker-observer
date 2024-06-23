@@ -24,12 +24,14 @@ export default function RootLayout({
             <main
                 className="flex min-h-screen flex-col bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
                 <div className="flex flex-col justify-center gap-12 py-16 px-16 items-center">
-                    <h1 className="text-5xl font-extrabold tracking-tight sm:text-[4rem] text-shadow-h1 underline-offset-2">
-                        Docker Observer
-                    </h1>
+                    <div className="flex flex-col">
+                        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[4rem] text-shadow-h1 underline-offset-2">
+                            Docker Observer
+                        </h1>
+                    </div>
                     <Navbar></Navbar>
                     <div className="2xl:max-w-[800px] xl:w-3/5  md:w-3/4 w-full">
-                    {children}
+                        {children}
                     </div>
                 </div>
             </main>

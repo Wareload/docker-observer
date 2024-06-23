@@ -5,8 +5,14 @@ import {z} from "zod";
 const dockerConnector = new Docker({socketPath: "/var/run/docker.sock"});
 
 export const dockerRouter = createTRPCRouter({
+    listImages: publicProcedure.query(async () => {
+        return await dockerConnector.listImages({all: true})
+    }),
     listContainer: publicProcedure.query(async () => {
         return await listContainer()
+    }),
+    getContainer: publicProcedure.input(z.object({id: z.string()})).mutation(async ({ctx, input}) => {
+        return await dockerConnector.getContainer(input.id).inspect()
     }),
     startContainer: publicProcedure.input(z.object({id: z.string()})).mutation(async ({ctx, input}) => {
         await dockerConnector.getContainer(input.id).start()

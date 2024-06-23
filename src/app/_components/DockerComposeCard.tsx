@@ -1,7 +1,6 @@
 'use client'
 import {CssCard, CssLink} from "wl/app/_utils/Css";
 import {useState} from "react";
-import ContainerActions from "wl/app/_components/ContainerActions";
 import {type ContainerInfo} from "dockerode";
 import {getContainerStats} from "wl/app/_utils/Container";
 import ContainerView from "wl/app/_components/ContainerView";
@@ -32,7 +31,7 @@ export default function DockerComposeCard({containers}: {
       </span>
                 </button>
                 <span className="font-extrabold text-2xl"><a href={"/project/" + containers.key}
-                                                             className={CssLink}>{containers.key ? containers.key : "without project"}</a></span>
+                                                             className={CssLink}>{containers.key ? containers.key : "<none>"}</a></span>
             </div>
             <span
                 className="ml-8 font-thin">{containerStats.running} running | {containerStats.paused} paused | {containerStats.exited} stopped</span>
