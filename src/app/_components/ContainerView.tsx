@@ -13,7 +13,7 @@ export default function ContainerView({container, expandedView}: {
         <span className="truncate" key={container.Id + "-id"}><strong>ID:</strong><a className={CssLink}
                                                                                      href={"/container/" + container.Id}> {container.Id}</a></span>
         <span className="truncate" key={container.Id + "-image"}><strong>Image:</strong><a className={CssLink}
-                                                                                           href={"/image/" + container.ImageID}> {container.Image}</a></span>
+                                                                                           href={"/images/" + container.ImageID}> {container.Image}</a></span>
         <span className={(expandedView ? "" : "hidden") + " truncate"}
               key={container.Id + "-nw"}><strong>Networks:</strong> {createNetworkLinks(container.NetworkSettings.Networks, container.Id)}</span>
         <span className={((expandedView && container.Mounts.length !== 0) ? "" : "hidden") + " truncate"}

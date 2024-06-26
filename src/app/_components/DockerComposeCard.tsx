@@ -13,7 +13,7 @@ export default function DockerComposeCard({containers}: {
     return <div
         className={CssCard}>
         <div className="flex flex-row justify-between">
-            <div className="flex flex-row justify-center items-center m-1">
+            <div className="flex flex-row justify-center items-center">
                 <button onClick={() => setExpanded(!expanded)}
                         className="relative mr-4 h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg border border-white text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85]"
                         type="button">
@@ -38,7 +38,8 @@ export default function DockerComposeCard({containers}: {
         </div>
         <div className={expanded ? "flex flex-col" : "hidden"}>
             {containers.value.map(item => {
-                return <ContainerView key={item.Id+"compose-card"} container={item} expandedView={false}></ContainerView>
+                return <ContainerView key={item.Id + "compose-card"} container={item}
+                                      expandedView={false}></ContainerView>
             })}
 
         </div>

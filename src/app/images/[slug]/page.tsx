@@ -4,7 +4,7 @@ import {DEFAULT_PAGE} from "wl/app/_utils/Consts";
 
 export default async function Container({params}: { params: { slug: string } }) {
     try {
-        const containerInfo = await api.docker.getContainer({id: params.slug})
+        const imageInfo = await api.docker.getImage({id: params.slug})
         return <h1>Some data</h1>
     } catch (e) {
         redirect(DEFAULT_PAGE)

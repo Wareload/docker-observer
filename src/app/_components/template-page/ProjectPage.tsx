@@ -24,7 +24,7 @@ export function ProjectPage({project}: { project: { key: string, value: Containe
         {project.value.map(item => {
             return <span className={((Object.keys(item.NetworkSettings.Networks).some(nw => {
                 return nw === networkFilter || networkFilter === undefined
-            }) ? "" : "opacity-30"))} key={"Span: " + item.Id}>
+            }) ? "" : "hidden"))} key={"Span: " + item.Id}>
                 <ContainerView container={item} expandedView={true}></ContainerView>
             </span>
         })}

@@ -14,6 +14,9 @@ export const dockerRouter = createTRPCRouter({
     getContainer: publicProcedure.input(z.object({id: z.string()})).mutation(async ({ctx, input}) => {
         return await dockerConnector.getContainer(input.id).inspect()
     }),
+    getImage: publicProcedure.input(z.object({id: z.string()})).mutation(async ({ctx, input}) => {
+        return await dockerConnector.getImage(input.id).inspect()
+    }),
     startContainer: publicProcedure.input(z.object({id: z.string()})).mutation(async ({ctx, input}) => {
         await dockerConnector.getContainer(input.id).start()
     }),
