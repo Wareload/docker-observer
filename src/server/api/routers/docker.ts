@@ -8,6 +8,14 @@ export const dockerRouter = createTRPCRouter({
     listImages: publicProcedure.query(async () => {
         return await dockerConnector.listImages({all: true})
     }),
+    listNetworks: publicProcedure.query(async () => {
+        return (await dockerConnector.listNetworks()).sort((a,b)=>{
+            return a.Name.localeCompare(b.Name)
+        })
+    }),
+    listVolumes: publicProcedure.query(async () => {
+        return await dockerConnector.listVolumes()
+    }),
     listContainer: publicProcedure.query(async () => {
         return await listContainer()
     }),
