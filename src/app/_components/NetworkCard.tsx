@@ -1,14 +1,10 @@
 'use client'
-import {CssCard, CssLink} from "wl/app/_utils/Css";
-import {useState} from "react";
-import {type ContainerInfo} from "dockerode";
-import {getContainerStats} from "wl/app/_utils/Container";
-import ContainerView from "wl/app/_components/ContainerView";
 
-export default function DockerComposeCard({containers}: {
-    containers: { key: string; value: ContainerInfo[] }
-}) {
-    const containerStats = getContainerStats(containers)
+import {type NetworkInspectInfo} from "dockerode";
+import {useState} from "react";
+import {CssCard, CssLink} from "wl/app/_utils/Css";
+
+export function NetworkCard({element, expandedView}: {element: NetworkInspectInfo, expandedView: boolean}){
     const [expanded, setExpanded] = useState(false)
     return <div
         className={CssCard}>
@@ -30,19 +26,15 @@ export default function DockerComposeCard({containers}: {
           </svg>}
       </span>
                 </button>
-                <span className="font-extrabold text-2xl"><a href={"/project/" + containers.key}
-                                                             className={CssLink}>{containers.key ? containers.key : "<none>"}</a></span>
+                <span className="font-extrabold text-2xl"><a href={"/network/" + element.Id}
+                                                             className={CssLink}>{element.Name}</a></span>
             </div>
-            <span
-                className="ml-8 font-thin">{containerStats.running} running | {containerStats.paused} paused | {containerStats.exited} stopped</span>
         </div>
-        <div className={expanded ? "flex flex-col" : "hidden"}>
-            {containers.value.map(item => {
-                return <ContainerView key={item.Id + "compose-card"} container={item}
-                                      expandedView={false}></ContainerView>
-            })}
-
+        <div className={expanded ? "flex flex-col flex-wrap gap-2 m-4 ml-1 mr-1 mb-0" : "hidden"}>
+            <span className="truncate w-full"><strong>ID: </strong><a href={"/network/"+element.Id} className={CssLink}>{element.Id}</a></span>
+            <span><strong>Driver: </strong>{element.Driver}</span>
+            <span><strong>Scope: </strong>{element.Scope}</span>
+            <span><strong>Created: </strong>{new Date(element.Created).toDateString()}</span>
         </div>
     </div>
 }
-

@@ -1,29 +1,49 @@
-# Create T3 App
+# Docker Observer
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
-
-## What's next? How do I make an app with this?
-
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Watch and observe your local docker instance. Have a better experience inspecting your different docker resources.
 
 ## How do I deploy this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+to be done
+
+## How do I run this?
+
+There are multiple ways to run this locally.
+
+### Docker Compose
+
+You need to have docker installed.
+
+Start the application:
+``` bash
+docker compose up -d
+```
+
+Stop the application:
+``` bash
+docker compose down
+```
+
+### Plain
+
+You need to have node v20 installed.
+
+Start the application:
+``` bash
+npm run dev
+```
+
+## To be done
+
+Finished:
+- Container overview
+- Project overview
+- Image overview
+
+Open:
+- single container
+- single image
+- network overview
+- single network
+- volumes overview
+- single volume
