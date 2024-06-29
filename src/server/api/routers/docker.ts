@@ -9,7 +9,7 @@ export const dockerRouter = createTRPCRouter({
         return await dockerConnector.listImages({all: true})
     }),
     listNetworks: publicProcedure.query(async () => {
-        return (await dockerConnector.listNetworks()).sort((a,b)=>{
+        return (await dockerConnector.listNetworks()).sort((a, b) => {
             return a.Name.localeCompare(b.Name)
         })
     }),
@@ -18,6 +18,11 @@ export const dockerRouter = createTRPCRouter({
     }),
     listContainer: publicProcedure.query(async () => {
         return await listContainer()
+    }),
+    listAllContainer: publicProcedure.query(async () => {
+        return (await dockerConnector.listContainers({all: true})).sort((a,b) => {
+            return a.Names.join(", ").toLowerCase().localeCompare(b.Names.join(", ").toLowerCase())
+        })
     }),
     getContainer: publicProcedure.input(z.object({id: z.string()})).mutation(async ({ctx, input}) => {
         return await dockerConnector.getContainer(input.id).inspect()
@@ -52,6 +57,9 @@ async function listContainer() {
     container.forEach((item) => {
         const key = item.Labels["com.docker.compose.project"] ?? "";
         const hit = array.find(element => element.key == key);
+        if (key === '') {
+            return
+        }
         if (hit) {
             hit.value.push(item);
         } else {

@@ -19,7 +19,7 @@ export default function ContainerActions(input: { item: ContainerInfo }) {
         }>;
     }) => mutationFn.useMutation({
         onMutate: () => setLoading(true),
-        onSuccess: () => router.refresh(),
+        onSuccess: () => location.reload(),
         onError: (e: TRPCClientErrorLike<InferrableClientTypes>) => alert("An error occurred: " + e.message),
         onSettled: () => setLoading(false)
     })

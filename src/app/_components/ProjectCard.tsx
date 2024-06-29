@@ -5,7 +5,7 @@ import {type ContainerInfo} from "dockerode";
 import {getContainerStats} from "wl/app/_utils/Container";
 import ContainerView from "wl/app/_components/ContainerView";
 
-export default function DockerComposeCard({containers}: {
+export default function ProjectCard({containers}: {
     containers: { key: string; value: ContainerInfo[] }
 }) {
     const containerStats = getContainerStats(containers)
@@ -30,7 +30,7 @@ export default function DockerComposeCard({containers}: {
           </svg>}
       </span>
                 </button>
-                <span className="font-extrabold text-2xl"><a href={"/project/" + containers.key}
+                <span className="font-extrabold text-2xl"><a href={"/projects/" + containers.key}
                                                              className={CssLink}>{containers.key ? containers.key : "<none>"}</a></span>
             </div>
             <span
