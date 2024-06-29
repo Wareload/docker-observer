@@ -26,12 +26,12 @@ export function NetworkCard({element, expandedView}: {element: NetworkInspectInf
           </svg>}
       </span>
                 </button>
-                <span className="font-extrabold text-2xl"><a href={"/network/" + element.Id}
+                <span className="font-extrabold text-2xl"><a href={"/networks/" + element.Id}
                                                              className={CssLink}>{element.Name}</a></span>
             </div>
         </div>
         <div className={expanded ? "flex flex-col flex-wrap gap-2 m-4 ml-1 mr-1 mb-0" : "hidden"}>
-            <span className="truncate w-full"><strong>ID: </strong><a href={"/network/"+element.Id} className={CssLink}>{element.Id}</a></span>
+            <span className="truncate w-full"><strong>ID: </strong><a href={"/networks/"+element.Id} className={CssLink}>{element.Id}</a></span>
             <span><strong>Driver: </strong>{element.Driver}</span>
             <span><strong>Scope: </strong>{element.Scope}</span>
             <span><strong>Created: </strong>{new Date(element.Created).toDateString()}</span>

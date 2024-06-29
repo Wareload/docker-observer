@@ -11,6 +11,13 @@
     @apply visible z-50;
 }
 
+.w-fill-available {
+    width: 100%;
+    width: -moz-available;          /* WebKit-based browsers will ignore this. */
+    width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    width: fill-available;
+}
+
 .text-shadow-h1 {
     text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
 }

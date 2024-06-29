@@ -26,7 +26,7 @@ export function VolumesCard({element, expandedView}: {element: VolumeInspectInfo
           </svg>}
       </span>
                 </button>
-                <span className="font-extrabold text-2xl block truncate w-full"><a href={"/network/" + element.Name}
+                <span className="font-extrabold text-2xl block truncate w-full"><a href={"/networks/" + element.Name}
                                                              className={CssLink}>{element.Name}</a></span>
             </div>
         </div>

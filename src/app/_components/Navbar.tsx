@@ -2,9 +2,10 @@
 import {usePathname} from "next/navigation"
 
 const navbarItems = [
+    {description: "Projects", path: "/projects"},
     {description: "Container", path: "/container"},
     {description: "Images", path: "/images"},
-    {description: "Network", path: "/network"},
+    {description: "Networks", path: "/networks"},
     {description: "Volumes", path: "/volumes"}
 ]
 

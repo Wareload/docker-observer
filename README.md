@@ -39,11 +39,11 @@ Finished:
 - Container overview
 - Project overview
 - Image overview
+- volumes overview
+- network overview
 
 Open:
 - single container
 - single image
-- network overview
 - single network
-- volumes overview
 - single volume

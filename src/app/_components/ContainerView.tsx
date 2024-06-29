@@ -24,10 +24,10 @@ export default function ContainerView({container, expandedView}: {
     </div>
 }
 
-function createNetworkLinks(Networks: Record<string, NetworkInfo>, id: string) {
+function createNetworkLinks(networks: Record<string, NetworkInfo>, id: string) {
     return <>
-        {Object.keys(Networks).map((key: string) => {
-            return <a className={CssLink} key={id + key} href={"/network/" + key}>{key}</a>
+        {Object.keys(networks).map((key: string) => {
+            return <a className={CssLink} key={id + key} href={"/networks/" + networks[key]!.NetworkID}>{key}</a>
         })}
     </>
 }
